@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>{{ product.name }} | TechStore</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+body {
+    background: #f5f7fa;
+    color: #111;
+}
+
+/* HEADER */
+header {
+    background: #000;
+    color: #fff;
+    padding: 15px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav a {
+    color: #fff;
+    margin-left: 20px;
+    text-decoration: none;
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+nav a:hover {
+    opacity: 1;
+}
+
+/* CONTAINER */
+.container {
+    padding: 40px;
+}
+
+/* PRODUCT */
+.product-page {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+}
+
+/* LEFT */
+
+.main-image {
+    width: 100%;
+    height: 400px;
+    object-fit: contain;
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+}
+
+.gallery {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.gallery img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    background: white;
+    padding: 5px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+/* RIGHT */
+
+.product-name {
+    font-size: 32px;
+    margin-bottom: 15px;
+}
+
+.price {
+    font-size: 26px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.stock {
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.stock.in { color: green; }
+.stock.out { color: red; }
+
+.buy-btn {
+    padding: 12px 25px;
+    background: #0071e3;
+    border: none;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.description {
+    margin-top: 20px;
+    line-height: 1.6;
+    opacity: 0.85;
+}
+
+/* SPECS */
+
+.specs {
+    margin-top: 30px;
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+}
+
+.spec-item {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #eee;
+    padding: 8px 0;
+}
+
+/* REVIEWS */
+
+.reviews-block {
+    margin-top: 40px;
+}
+
+.review {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.stars {
+    color: gold;
+}
+
+textarea {
+    width: 100%;
+    height: 100px;
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+select {
+    padding: 8px;
+    border-radius: 6px;
+    margin-top: 10px;
+}
+
+.submit-btn {
+    margin-top: 10px;
+    background: black;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+}
+
+.avg-rating {
+    margin: 15px 0;
+    font-size: 18px;
+}
+
+/* FOOTER */
+
+footer {
+    margin-top: 40px;
+    padding: 20px;
+    text-align: center;
+    background: #111;
+    color: #aaa;
+}
+
+@media (max-width: 768px) {
+    .product-page {
+        grid-template-columns: 1fr;
+    }
+
+    .main-image {
+        height: 300px;
+    }
+}
+</style>
+
+<script>
+function changeImage(src) {
+    document.getElementById("mainImage").src = src;
+}
+</script>
+
+</head>
+<body>
+
+<header>
+    <h1>TechStore</h1>
+    <nav>
+        <a href="/">Главная</a>
+        <a href="#">Каталог</a>
+        <a href="{% url 'contacts' %}">Контакты</a>
+    </nav>
+</header>
+
+<div class="container">
+
+<div class="product-page">
+
+<!-- LEFT -->
+
+<div>
+{% with main=product.images.first %}
+{% if main %}
+<img id="mainImage" class="main-image" src="{{ main.image.url }}">
+{% endif %}
+{% endwith %}
+
+<div class="gallery">
+{% for img in product.images.all %}
+<img src="{{ img.image.url }}" onclick="changeImage('{{ img.image.url }}')">
+{% endfor %}
+</div>
+
+<!-- REVIEWS -->
+
+<div class="reviews-block">
+
+<h2>Отзывы</h2>
+
+<div class="avg-rating">
+<strong>{{ avg_rating }}</strong> / 5
+<div class="stars">
+{% for i in "12345" %}
+    {% if forloop.counter <= avg_rating %}
+        ⭐
+    {% else %}
+        ☆
+    {% endif %}
+{% endfor %}
+</div>
+</div>
+
+{% if user.is_authenticated %}
+<form method="post">
+{% csrf_token %}
+
+<select name="rating">
+<option value="5">★★★★★</option>
+<option value="4">★★★★</option>
+<option value="3">★★★</option>
+<option value="2">★★</option>
+<option value="1">★</option>
+</select>
+
+<textarea name="comment" placeholder="Напишите отзыв..." required></textarea>
+
+<button class="submit-btn">Отправить</button>
+
+</form>
+{% else %}
+<p>Войдите, чтобы оставить отзыв</p>
+{% endif %}
+
+<div class="reviews">
+{% for review in reviews %}
+<div class="review">
+<strong>{{ review.user.username }}</strong>
+
+<div class="stars">
+{% for i in "12345" %}
+    {% if forloop.counter <= review.rating %}
+        ⭐
+    {% else %}
+        ☆
+    {% endif %}
+{% endfor %}
+</div>
+
+<p>{{ review.comment }}</p>
+<small>{{ review.created_at|date:"d.m.Y H:i" }}</small>
+</div>
+{% empty %}
+<p>Пока нет отзывов</p>
+{% endfor %}
+</div>
+
+</div>
+
+</div>
+
+<!-- RIGHT -->
+
+<div>
+
+<div class="product-name">{{ product.name }}</div>
+
+<div class="price">{{ product.price }} сом</div>
+
+<div class="stock {% if product.stock > 0 %}in{% else %}out{% endif %}">
+{% if product.stock > 0 %}
+✔ В наличии
+{% else %}
+✖ Нет в наличии
+{% endif %}
+</div>
+
+<button class="buy-btn">Купить</button>
+
+<div class="description">
+{{ product.description }}
+</div>
+
+<div class="specs">
+<h3>Характеристики</h3>
+
+{% for spec in specifications %}
+<div class="spec-item">
+<span>{{ spec.name }}</span>
+<span>{{ spec.value }}</span>
+</div>
+{% empty %}
+<p>Нет характеристик</p>
+{% endfor %}
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<footer>
+    © 2026 TechStore — Интернет-магазин электроники
+</footer>
+
+</body>
+</html>
