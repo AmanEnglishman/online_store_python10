@@ -174,7 +174,7 @@
         <a href="{% url 'contacts' %}">Контакты</a>
 
         {% if user.is_authenticated %}
-        <a href="#">Привет, {{ user.username }}</a>
+        <a href="{% url 'cart' %}">Корзина</a>
         <form action="{% url 'logout' %}" method="post" style="display:inline;">
             {% csrf_token %}
             <button style="background:none;border:none;color:white;cursor:pointer;">
