@@ -174,11 +174,16 @@
         <a href="{% url 'contacts' %}">Контакты</a>
 
         {% if user.is_authenticated %}
-            <a href="#">Привет, {{ user.username }}</a>
-            <a href="{% url 'logout' %}">Выйти</a>
+        <a href="#">Привет, {{ user.username }}</a>
+        <form action="{% url 'logout' %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button style="background:none;border:none;color:white;cursor:pointer;">
+                Выйти
+            </button>
+        </form>
         {% else %}
-            <a href="{% url 'login' %}">Вход</a>
-            <a href="{% url 'register' %}">Регистрация</a>
+        <a href="{% url 'login' %}">Вход</a>
+        <a href="{% url 'register' %}">Регистрация</a>
         {% endif %}
     </nav>
 </header>
@@ -206,9 +211,9 @@
             <div class="price">{{ product.price }} сом</div>
             <div class="stock">
                 {% if product.stock > 0 %}
-                    В наличии
+                В наличии
                 {% else %}
-                    Нет в наличии
+                Нет в наличии
                 {% endif %}
             </div>
             <a href="{% url 'product_detail' product.id %}" class="btn">
