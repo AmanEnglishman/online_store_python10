@@ -208,7 +208,12 @@
             {% endif %}
             {% endwith %}
             <h3>{{ product.name }}</h3>
-            <div class="price">{{ product.price }} сом</div>
+            {% if product.discount %}
+            <p>Старая цена: <s>{{ product.price }}</s></p>
+            <p>Новая цена: {{ product.get_discounted_price }}</p>
+            {% else %}
+            <p>Цена: {{ product.price }}</p>
+            {% endif %}
             <div class="stock">
                 {% if product.stock > 0 %}
                 В наличии

@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from .models import Product, Category, ProductImage, ProductSpecification, Review
+from .models import Product, Category, ProductImage, ProductSpecification, Review, Discount
+
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -29,3 +30,7 @@ class ProductAdmin(admin.ModelAdmin):
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
     list_display = ('user', 'product', )
+
+@admin.register(Discount)
+class DiscountAdmin(admin.ModelAdmin):
+    list_display = ('name', )

@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 class Category(models.Model):
     name = models.CharField(max_length=255)
@@ -24,6 +25,21 @@ class Product(models.Model):
     )
     stock = models.PositiveSmallIntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
+    discount = models.ForeignKey(
+        'Discount',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='products'
+    )
+
+    def get_discounted_price(self):
+        if self.discount and self.discount.active:
+            now = timezone.now()
+            if self.discount.start_date <= now <= self.discount.end_date:
+                return self.price * (100 - self.discount.percent) / 100
+        return self.price
+
 
     def __str__(self):
         return f'{self.name}'
@@ -69,3 +85,14 @@ class Review(models.Model):
 
     def __str__(self):
         return f'{self.user.username} review for {self.product.name}'
+
+
+class Discount(models.Model):
+    name = models.CharField(max_length=255)
+    percent = models.PositiveSmallIntegerField(help_text="Скидка в процентах")
+    active = models.BooleanField(default=True)
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField()
+
+    def __str__(self):
+        return f"{self.name} - {self.percent}%"
