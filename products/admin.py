@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Product, Category, ProductImage, ProductSpecification, Review, Discount
+from .models import Product, Category, ProductImage, ProductSpecification, Review, Discount, Banner
 
 
 @admin.register(Category)
@@ -34,3 +34,8 @@ class ReviewAdmin(admin.ModelAdmin):
 @admin.register(Discount)
 class DiscountAdmin(admin.ModelAdmin):
     list_display = ('name', )
+
+
+@admin.register(Banner)
+class BannerAdmin(admin.ModelAdmin):
+    list_display = ('title', )

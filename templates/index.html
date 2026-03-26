@@ -1,168 +1,156 @@
 <!DOCTYPE html>
+
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <title>TechStore</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        }
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
 
-        body {
-            background: #f5f7fa;
-            color: #111;
-        }
+    body {
+        background: #f5f7fa;
+        color: #111;
+    }
 
-        /* HEADER */
-        header {
-            background: #000;
-            color: #fff;
-            padding: 15px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    /* HEADER */
+    header {
+        background: #000;
+        color: #fff;
+        padding: 15px 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-        header h1 {
-            font-size: 24px;
-            letter-spacing: 1px;
-        }
+    header h1 {
+        font-size: 24px;
+        letter-spacing: 1px;
+    }
 
-        nav a {
-            color: #fff;
-            margin-left: 20px;
-            text-decoration: none;
-            font-size: 14px;
-            opacity: 0.8;
-        }
+    nav a {
+        color: #fff;
+        margin-left: 20px;
+        text-decoration: none;
+        font-size: 14px;
+        opacity: 0.8;
+    }
 
-        nav a:hover {
-            opacity: 1;
-        }
+    nav a:hover {
+        opacity: 1;
+    }
 
-        /* HERO */
-        .hero {
-            height: 70vh;
-            background: linear-gradient(to right, #000, #333);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 50px;
-        }
+    /* SLIDER */
+    .slider {
+        position: relative;
+        width: 100%;
+        height: 70vh;
+        overflow: hidden;
+    }
 
-        .hero-text {
-            max-width: 500px;
-        }
+    .slide {
+        display: none;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+    }
 
-        .hero h2 {
-            font-size: 48px;
-            margin-bottom: 20px;
-        }
+    .slide img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
 
-        .hero p {
-            font-size: 18px;
-            opacity: 0.8;
-            margin-bottom: 30px;
-        }
+    .slide.active {
+        display: block;
+    }
 
-        .hero button {
-            padding: 12px 25px;
-            background: #0071e3;
-            border: none;
-            color: white;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-        }
+    .slide-text {
+        position: absolute;
+        bottom: 50px;
+        left: 50px;
+        color: white;
+        background: rgba(0,0,0,0.5);
+        padding: 20px;
+        border-radius: 10px;
+    }
 
-        /* PRODUCTS */
-        .container {
-            padding: 40px;
-        }
+    .slide-text h2 {
+        font-size: 36px;
+    }
 
-        .section-title {
-            font-size: 28px;
-            margin-bottom: 20px;
-        }
+    /* PRODUCTS */
+    .container {
+        padding: 40px;
+    }
 
-        .products {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-        }
+    .section-title {
+        font-size: 28px;
+        margin-bottom: 20px;
+    }
 
-        .card {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            transition: 0.3s;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        }
+    .products {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+    }
 
-        .card:hover {
-            transform: translateY(-5px);
-        }
+    .card {
+        background: white;
+        border-radius: 15px;
+        padding: 20px;
+        transition: 0.3s;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
 
-        .card img {
-            width: 100%;
-            height: 180px;
-            object-fit: contain;
-            margin-bottom: 15px;
-        }
+    .card:hover {
+        transform: translateY(-5px);
+    }
 
-        .card h3 {
-            font-size: 18px;
-            margin-bottom: 10px;
-        }
+    .card img {
+        width: 100%;
+        height: 180px;
+        object-fit: contain;
+        margin-bottom: 15px;
+    }
 
-        .price {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
+    .card h3 {
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
 
-        .stock {
-            font-size: 14px;
-            color: green;
-            margin-bottom: 15px;
-        }
+    .stock {
+        font-size: 14px;
+        color: green;
+        margin-bottom: 15px;
+    }
 
-        .btn {
-            display: inline-block;
-            padding: 10px 15px;
-            background: black;
-            color: white;
-            border-radius: 8px;
-            text-decoration: none;
-            font-size: 14px;
-        }
+    .btn {
+        display: inline-block;
+        padding: 10px 15px;
+        background: black;
+        color: white;
+        border-radius: 8px;
+        text-decoration: none;
+        font-size: 14px;
+    }
 
-        /* FOOTER */
-        footer {
-            margin-top: 40px;
-            padding: 20px;
-            text-align: center;
-            background: #111;
-            color: #aaa;
-        }
+    footer {
+        margin-top: 40px;
+        padding: 20px;
+        text-align: center;
+        background: #111;
+        color: #aaa;
+    }
+</style>
 
-        @media (max-width: 768px) {
-            .hero {
-                flex-direction: column;
-                text-align: center;
-            }
 
-            .hero h2 {
-                font-size: 32px;
-            }
-        }
-    </style>
 </head>
 <body>
 
@@ -173,65 +161,103 @@
         <a href="#">Каталог</a>
         <a href="{% url 'contacts' %}">Контакты</a>
 
-        {% if user.is_authenticated %}
-        <a href="{% url 'cart' %}">Корзина</a>
-        <form action="{% url 'logout' %}" method="post" style="display:inline;">
-            {% csrf_token %}
-            <button style="background:none;border:none;color:white;cursor:pointer;">
-                Выйти
-            </button>
-        </form>
-        {% else %}
-        <a href="{% url 'login' %}">Вход</a>
-        <a href="{% url 'register' %}">Регистрация</a>
-        {% endif %}
-    </nav>
+    {% if user.is_authenticated %}
+    <a href="{% url 'cart' %}">Корзина</a>
+    <form action="{% url 'logout' %}" method="post" style="display:inline;">
+        {% csrf_token %}
+        <button style="background:none;border:none;color:white;cursor:pointer;">
+            Выйти
+        </button>
+    </form>
+    {% else %}
+    <a href="{% url 'login' %}">Вход</a>
+    <a href="{% url 'register' %}">Регистрация</a>
+    {% endif %}
+</nav>
+
+
 </header>
 
-<section class="hero">
-    <div class="hero-text">
-        <h2>Новая техника 2026</h2>
-        <p>Смартфоны, ноутбуки и гаджеты по лучшим ценам</p>
-        <button>Смотреть каталог</button>
-    </div>
-</section>
+<!-- SLIDER -->
+
+<div class="slider">
+    {% for banner in banners %}
+        <div class="slide">
+            <a href="{{ banner.url }}">
+                <img src="{{ banner.image.url }}" alt="{{ banner.title }}">
+                <div class="slide-text">
+                    <h2>{{ banner.title }}</h2>
+                </div>
+            </a>
+        </div>
+    {% endfor %}
+</div>
 
 <div class="container">
     <h2 class="section-title">Популярные товары</h2>
 
-    <div class="products">
-        {% for product in products %}
-        <div class="card">
-            {% with image=product.images.first %}
-            {% if image %}
-            <img class="product-image" src="{{ image.image.url }}">
-            {% endif %}
-            {% endwith %}
-            <h3>{{ product.name }}</h3>
-            {% if product.discount %}
-            <p>Старая цена: <s>{{ product.price }}</s></p>
-            <p>Новая цена: {{ product.get_discounted_price }}</p>
+
+<div class="products">
+    {% for product in products %}
+    <div class="card">
+        {% with image=product.images.first %}
+        {% if image %}
+        <img src="{{ image.image.url }}">
+        {% endif %}
+        {% endwith %}
+
+        <h3>{{ product.name }}</h3>
+
+        {% if product.discount %}
+        <p>Старая цена: <s>{{ product.price }}</s></p>
+        <p>Новая цена: {{ product.get_discounted_price }}</p>
+        {% else %}
+        <p>Цена: {{ product.price }}</p>
+        {% endif %}
+
+        <div class="stock">
+            {% if product.stock > 0 %}
+            В наличии
             {% else %}
-            <p>Цена: {{ product.price }}</p>
+            Нет в наличии
             {% endif %}
-            <div class="stock">
-                {% if product.stock > 0 %}
-                В наличии
-                {% else %}
-                Нет в наличии
-                {% endif %}
-            </div>
-            <a href="{% url 'product_detail' product.id %}" class="btn">
-                Подробнее
-            </a>
         </div>
-        {% endfor %}
+
+        <a href="{% url 'product_detail' product.id %}" class="btn">
+            Подробнее
+        </a>
     </div>
+    {% endfor %}
+</div>
+
+
 </div>
 
 <footer>
     © 2026 TechStore — Интернет-магазин электроники
 </footer>
+
+
+
+<script>
+    let slides = document.querySelectorAll('.slide');
+    let current = 0;
+
+    function showSlide(index) {
+        slides.forEach(slide => slide.classList.remove('active'));
+        slides[index].classList.add('active');
+    }
+
+    function nextSlide() {
+        current = (current + 1) % slides.length;
+        showSlide(current);
+    }
+
+    if (slides.length > 0) {
+        showSlide(current);
+        setInterval(nextSlide, 3000);
+    }
+</script>
 
 </body>
 </html>

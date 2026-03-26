@@ -96,3 +96,13 @@ class Discount(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.percent}%"
+
+
+class Banner(models.Model):
+    title = models.CharField(max_length=255)
+    image = models.ImageField(upload_to='banners/')
+    url = models.URLField()
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.title

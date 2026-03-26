@@ -2,12 +2,13 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Avg
 
 
-from .models import Product
+from .models import Product, Banner
 from .forms import ReviewForm, Review
 
 def index(request):
+    banners = Banner.objects.filter(is_active=True)
     products = Product.objects.prefetch_related('images').all()[:12]
-    return render(request, 'index.html', {'products': products})
+    return render(request, 'index.html', {'products': products, 'banners': banners})
 
 def contacts(request):
     return render(request, 'contacts.html')
