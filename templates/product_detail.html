@@ -324,11 +324,13 @@
                 ✖ Нет в наличии
                 {% endif %}
             </div>
-
+            {% if product.stock > 0 %}
             <form action="{% url 'add_to_cart' product.id %}" method="post">
                 {% csrf_token %}
                 <button class="buy-btn">Добавить в корзину</button>
             </form>
+            {% else %}
+            {% endif %}
 
             <div class="description">
                 {{ product.description }}
