@@ -27,20 +27,12 @@
             align-items: center;
         }
 
-        header h1 {
-            font-size: 24px;
-        }
-
         nav a {
             color: #fff;
             margin-left: 20px;
             text-decoration: none;
             font-size: 14px;
             opacity: 0.8;
-        }
-
-        nav a:hover {
-            opacity: 1;
         }
 
         .container {
@@ -62,8 +54,8 @@
             border-radius: 15px;
             padding: 20px;
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
 
@@ -87,21 +79,51 @@
             font-weight: bold;
         }
 
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .qty-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: #eee;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .qty-btn:hover {
+            background: #ddd;
+        }
+
         .quantity {
-            font-size: 14px;
-            color: #555;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
+        }
+
+        .remove-btn {
+            background: #ff4d4f;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
         }
 
         .total {
-            font-size: 18px;
             font-weight: bold;
-        }
-
-        .empty {
-            text-align: center;
-            padding: 60px;
-            background: white;
-            border-radius: 15px;
+            font-size: 18px;
         }
 
         .checkout {
@@ -116,7 +138,13 @@
             color: white;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 16px;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 60px;
+            background: white;
+            border-radius: 15px;
         }
 
         footer {
@@ -138,13 +166,13 @@
         <a href="{% url 'contacts' %}">Контакты</a>
 
         {% if user.is_authenticated %}
-        <a href="#">Привет, {{ user.username }}</a>
-        <form action="{% url 'logout' %}" method="post" style="display:inline;">
-            {% csrf_token %}
-            <button style="background:none;border:none;color:white;cursor:pointer;">
-                Выйти
-            </button>
-        </form>
+            <a href="#">Привет, {{ user.username }}</a>
+            <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button style="background:none;border:none;color:white;cursor:pointer;">
+                    Выйти
+                </button>
+            </form>
         {% endif %}
     </nav>
 </header>
@@ -156,6 +184,7 @@
         <div class="cart-items">
             {% for item in items %}
             <div class="card">
+
                 <div class="left">
                     {% with image=item.product.images.first %}
                         {% if image %}
@@ -166,13 +195,39 @@
                     <div class="info">
                         <h3>{{ item.product.name }}</h3>
                         <div class="price">{{ item.product.price }} сом</div>
-                        <div class="quantity">Количество: {{ item.quantity }}</div>
+
+                        <div class="quantity-controls">
+
+                            <!-- МИНУС -->
+                            <form method="post" action="{% url 'decrease_quantity' item.id %}">
+                                {% csrf_token %}
+                                <button class="qty-btn">−</button>
+                            </form>
+
+                            <span class="quantity">{{ item.quantity }}</span>
+
+                            <!-- ПЛЮС -->
+                            <form method="post" action="{% url 'increase_quantity' item.id %}">
+                                {% csrf_token %}
+                                <button class="qty-btn">+</button>
+                            </form>
+
+                        </div>
                     </div>
                 </div>
 
-                <div class="total">
-                    {{ item.get_total_price }} сом
+                <div class="right">
+                    <div class="total">
+                        {{ item.get_total_price }} сом
+                    </div>
+
+                    <!-- УДАЛИТЬ -->
+                    <form method="post" action="{% url 'remove_from_cart' item.id %}">
+                        {% csrf_token %}
+                        <button class="remove-btn">Удалить</button>
+                    </form>
                 </div>
+
             </div>
             {% endfor %}
         </div>

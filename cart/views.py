@@ -27,3 +27,34 @@ def cart_view(request):
     context = {'cart': cart, 'items': items, 'total': total}
 
     return render(request, 'cart/cart.html', context)
+
+def increase_quantity(request, item_id):
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    item = get_object_or_404(CartItem, id=item_id, cart__user=request.user)
+    item.quantity += 1
+    item.save()
+
+    return redirect('cart')
+
+def decrease_quantity(request, item_id):
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    item = get_object_or_404(CartItem, id=item_id, cart__user=request.user)
+    if item.quantity > 1:
+        item.quantity -= 1
+        item.save()
+    else:
+        item.delete()
+
+    return redirect('cart')
+
+def remove_from_cart(request, item_id):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    item = get_object_or_404(CartItem, id=item_id, cart__user=request.user)
+    item.delete()
+
+    return redirect('cart')
